@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employees</title>
+</head>
+<body>
+
+    <h1>Employees</h1>
+
+    <form method="POST">
+
+        <input
+            type="text"
+            name="name"
+            placeholder="Employee Name"
+        >
+
+        <input
+            type="text"
+            name="skill"
+            placeholder="Skill"
+        >
+
+        <button type="submit">
+            Add Employee
+        </button>
+
+    </form>
+
+    <h2>Employee List</h2>
+
+    <table border="1">
+
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Skill</th>
+            <th>Available</th>
+        </tr>
+
+        {% for employee in employees %}
+
+        <tr>
+            <td>{{ employee[0] }}</td>
+            <td>{{ employee[1] }}</td>
+            <td>{{ employee[2] }}</td>
+            <td>{{ employee[3] }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</body>
+</html>

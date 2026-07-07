@@ -344,9 +344,9 @@ Through this project I learned:
 
 BCA Student | Python Developer
 
-GitHub: https://github.com/yourusername
+GitHub: https://github.com/gauriri-exe
 
-LinkedIn: https://linkedin.com/in/yourprofile
+LinkedIn: https://www.linkedin.com/in/gauri-gupta-849670202/
 
 ---
 

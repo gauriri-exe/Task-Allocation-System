@@ -1,23 +1,42 @@
-import flask
 import mysql.connector
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
 db = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Gauri@10214?",
+    password="Garv140605",
     database="task_allocation"
 )
 
 cursor = db.cursor()
 
 
-@app.route("/")
+# ---------------- LOGIN ---------------- #
+
+@app.route("/", methods=["GET", "POST"])
+def login():
+
+    if request.method == "POST":
+
+        username = request.form["username"]
+        password = request.form["password"]
+
+        if username == "admin" and password == "admin123":
+            return redirect("/home")
+
+    return render_template("login.html")
+
+
+# ---------------- HOME ---------------- #
+
+@app.route("/home")
 def home():
     return render_template("index.html")
 
+
+# ---------------- EMPLOYEES ---------------- #
 
 @app.route("/employees", methods=["GET", "POST"])
 def employees():
@@ -43,6 +62,9 @@ def employees():
         employees=employees_list
     )
 
+
+# ---------------- TASKS ---------------- #
+
 @app.route("/tasks", methods=["GET", "POST"])
 def tasks():
 
@@ -56,11 +78,7 @@ def tasks():
         VALUES (%s, %s)
         """
 
-        cursor.execute(
-            query,
-            (task_name, required_skill)
-        )
-
+        cursor.execute(query, (task_name, required_skill))
         db.commit()
 
     cursor.execute("SELECT * FROM tasks")
@@ -72,38 +90,40 @@ def tasks():
     )
 
 
+# ---------------- ASSIGN TASK ---------------- #
 
-@app.route("/assign")
-def assign_tasks():
+@app.route("/assign", methods=["GET", "POST"])
+def assign():
 
-    cursor.execute(
-        "SELECT id, name, skill FROM employees WHERE available = 1"
-    )
+    if request.method == "POST":
 
-    employees = cursor.fetchall()
+        employee_id = request.form["employee_id"]
+        task_id = request.form["task_id"]
 
-    cursor.execute(
-        "SELECT id, task_name, required_skill FROM tasks WHERE status='Open'"
-    )
+        cursor.execute(
+            "SELECT skill, available FROM employees WHERE id = %s",
+            (employee_id,)
+        )
+        employee = cursor.fetchone()
 
-    tasks = cursor.fetchall()
+        cursor.execute(
+            "SELECT required_skill FROM tasks WHERE id = %s",
+            (task_id,)
+        )
+        task = cursor.fetchone()
 
-    for task in tasks:
+        if employee and task:
 
-        task_id = task[0]
-        required_skill = task[2]
+            employee_skill = employee[0]
+            available = employee[1]
+            required_skill = task[0]
 
-        for employee in employees:
-
-            employee_id = employee[0]
-            employee_skill = employee[2]
-
-            if employee_skill == required_skill:
+            if available and employee_skill.strip().lower() == required_skill.strip().lower():
 
                 cursor.execute(
                     """
                     INSERT INTO assignments(employee_id, task_id)
-                    VALUES(%s,%s)
+                    VALUES(%s, %s)
                     """,
                     (employee_id, task_id)
                 )
@@ -111,7 +131,7 @@ def assign_tasks():
                 cursor.execute(
                     """
                     UPDATE employees
-                    SET available = 0
+                    SET available = FALSE
                     WHERE id = %s
                     """,
                     (employee_id,)
@@ -128,10 +148,42 @@ def assign_tasks():
 
                 db.commit()
 
-                break
+    cursor.execute("""
+        SELECT id, name, skill
+        FROM employees
+        WHERE available = TRUE
+    """)
+    employees = cursor.fetchall()
 
-    return "Tasks Assigned Successfully"
+    cursor.execute("""
+        SELECT id, task_name, required_skill
+        FROM tasks
+        WHERE status = 'Open'
+    """)
+    tasks = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT
+            e.name,
+            e.skill,
+            t.task_name,
+            t.required_skill
+        FROM assignments a
+        JOIN employees e
+            ON a.employee_id = e.id
+        JOIN tasks t
+            ON a.task_id = t.id
+    """)
+
+    assignments = cursor.fetchall()
+
+    return render_template(
+        "assign.html",
+        employees=employees,
+        tasks=tasks,
+        assignments=assignments
+    )
+
 
 if __name__ == "__main__":
     app.run(debug=True)
-    

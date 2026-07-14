@@ -1,22 +1,72 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Task Allocation System</title>
+
+<title>Task Allocation System</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
 </head>
+
 <body>
 
-<h1>Task Allocation System</h1>
+<nav>
 
-<p>Welcome to the Task Allocation System</p>
+<a href="/home">🏠 Home</a>
+<a href="/employees">👥 Employees</a>
 
-<a href="/employees">Employees</a>
-<br>
+<a href="/tasks">📋 Tasks</a>
 
-<a href="/assign">
-    Assign Tasks
-</a><br>
+<a href="/assign">⚡ Assign</a>
 
-<a href="/tasks">Tasks</a>
+</nav>
+
+<div class="container">
+
+<h1>🌸 Task Allocation System</h1>
+
+<p class="subtitle">
+Manage employees and assign tasks efficiently.
+</p>
+
+<div class="cards">
+
+<div class="card">
+
+<h2>👥</h2>
+
+<p>Manage Employees</p>
+
+</div>
+
+<div class="card">
+
+<h2>📋</h2>
+
+<p>Create Tasks</p>
+
+</div>
+
+<div class="card">
+
+<h2>⚡</h2>
+
+<p>Assign Work</p>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+
+Made by Gauri Gupta
+
+</footer>
 
 </body>
+
 </html>

@@ -2,10 +2,25 @@
 <html>
 <head>
     <title>Employees</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <h1>Employees</h1>
+<div class="container">
+
+    <h1>👥 Employees</h1>
+
+    <nav>
+
+<a href="/home">🏠 Home</a>
+
+<a href="/employees">👥 Employees</a>
+
+<a href="/tasks">📋 Tasks</a>
+
+<a href="/assign">⚡ Assign</a>
+
+</nav>
 
     <form method="POST">
 
@@ -13,23 +28,25 @@
             type="text"
             name="name"
             placeholder="Employee Name"
+            required
         >
 
         <input
             type="text"
             name="skill"
-            placeholder="Skill"
+            placeholder="Employee Skill"
+            required
         >
 
         <button type="submit">
-            Add Employee
+            ➕ Add Employee
         </button>
 
     </form>
 
     <h2>Employee List</h2>
 
-    <table border="1">
+    <table>
 
         <tr>
             <th>ID</th>
@@ -44,12 +61,20 @@
             <td>{{ employee[0] }}</td>
             <td>{{ employee[1] }}</td>
             <td>{{ employee[2] }}</td>
-            <td>{{ employee[3] }}</td>
+            <td>
+                {% if employee[3] %}
+                    ✅ Available
+                {% else %}
+                    ❌ Busy
+                {% endif %}
+            </td>
         </tr>
 
         {% endfor %}
 
     </table>
+
+</div>
 
 </body>
 </html>

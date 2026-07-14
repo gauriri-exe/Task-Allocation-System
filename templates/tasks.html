@@ -2,30 +2,77 @@
 <html>
 <head>
     <title>Tasks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h1>Tasks</h1>
+<div class="container">
 
-<form method="POST">
+    <h1>📋 Tasks</h1>
 
-    <input
-        type="text"
-        name="task_name"
-        placeholder="Task Name"
-    >
+    <nav>
 
-    <input
-        type="text"
-        name="required_skill"
-        placeholder="Required Skill"
-    >
+<a href="/home">🏠 Home</a>
 
-    <button type="submit">
-        Add Task
-    </button>
+<a href="/employees">👥 Employees</a>
 
-</form>
+<a href="/tasks">📋 Tasks</a>
+
+<a href="/assign">⚡ Assign</a>
+
+</nav>
+
+    <form method="POST">
+
+        <input
+            type="text"
+            name="task_name"
+            placeholder="Task Name"
+            required
+        >
+
+        <input
+            type="text"
+            name="required_skill"
+            placeholder="Required Skill"
+            required
+        >
+
+        <button type="submit">
+            ➕ Add Task
+        </button>
+
+    </form>
+
+    {% if tasks %}
+
+    <h2>Task List</h2>
+
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>Task</th>
+            <th>Required Skill</th>
+            <th>Status</th>
+        </tr>
+
+        {% for task in tasks %}
+
+        <tr>
+            <td>{{ task[0] }}</td>
+            <td>{{ task[1] }}</td>
+            <td>{{ task[2] }}</td>
+            <td>{{ task[3] }}</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% endif %}
+
+</div>
 
 </body>
 </html>

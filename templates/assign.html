@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Assign Task</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<nav>
+
+    <a href="/home">🏠 Home</a>
+    <a href="/employees">👥 Employees</a>
+    <a href="/tasks">📋 Tasks</a>
+    <a href="/assign">⚡ Assign</a>
+
+</nav>
+
+<div class="container">
+
+    <h1>⚡ Assign Task</h1>
+
+    <p class="subtitle">
+        Assign a task to an available employee.
+    </p>
+
+    <form method="POST">
+
+        <label><strong>Select Employee</strong></label>
+
+        <select name="employee_id" required>
+
+            <option value="">-- Choose Employee --</option>
+
+            {% for employee in employees %}
+
+            <option value="{{ employee[0] }}">
+                {{ employee[1] }} ({{ employee[2] }})
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <br><br>
+
+        <label><strong>Select Task</strong></label>
+
+        <select name="task_id" required>
+
+            <option value="">-- Choose Task --</option>
+
+            {% for task in tasks %}
+
+            <option value="{{ task[0] }}">
+                {{ task[1] }} ({{ task[2] }})
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+        <br><br>
+
+        <button type="submit">
+            🚀 Assign Task
+        </button>
+
+    </form>
+
+    {% if assignments %}
+
+    <h2 style="margin-top:40px;">📋 Assigned Tasks</h2>
+
+    <table>
+
+        <tr>
+
+            <th>Employee</th>
+            <th>Skill</th>
+            <th>Task</th>
+            <th>Required Skill</th>
+
+        </tr>
+
+        {% for assignment in assignments %}
+
+        <tr>
+
+            <td>{{ assignment[0] }}</td>
+            <td>{{ assignment[1] }}</td>
+            <td>{{ assignment[2] }}</td>
+            <td>{{ assignment[3] }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% endif %}
+
+</div>
+</body>
+</html>
